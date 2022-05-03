@@ -1,0 +1,16 @@
+:root {
+    --primary: #467ca0;
+    --primary-light--1: #6bb2e3;
+    --primary-light--2: #e3f1fb;
+    --primary--dark: #153153;
+    --gray: #bcbcbc;
+    --background-overlayModal: rgba(21,49,83,0.8);
+    --warning: #fff9e5;
+    --warning-dark: #f5be05;
+    --success: #e2f7e7;
+    --success-dark: #89d089;
+    --danger: #fce5e7;
+    --danger-dark: #de7c7c;
+}
+
+/* var(--primary) */
