@@ -5,7 +5,7 @@ import { ListItem } from "react-native-elements";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { setSelectedCategory } from '../actions';
 import { ALL_CATEGORIES } from "../API/query";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import ArticleByCategoryScreen from '../components/article/ArticleByCategoryScreen';
 
 
@@ -26,7 +26,6 @@ export default function CategoriesScreen({ navigation }) {
   const [fetchCategories, { loading, error, refetch }] = useLazyQuery(ALL_CATEGORIES, { 
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
-      console.log('allCategories ', data.allCategory);
       setAllCategory(data.allCategory);
     },
     onError() {

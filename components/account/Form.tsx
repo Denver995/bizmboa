@@ -344,13 +344,6 @@ function Form(props: any) {
                         disabledTitleStyle={styles.btnText}
                         onPress={onSubmit}
                     />
-                    {/* <TouchableOpacity onPress={onSubmit} disabled={loader}>
-                        <MaterialCommunityIcons
-                            name={'send-circle'}
-                            size={45}
-                            color={mainColor}
-                        />
-                    </TouchableOpacity> */}
                 </View>
             </View>
         </KeyboardAvoidingView>
@@ -419,12 +412,9 @@ const styles = StyleSheet.create({
     },
     formcontrol: {
         width: '100%',
-        // height: 35,
-        // padding: 10,
         marginTop: 10,
         borderBottomWidth: 1,
         borderWidth: 1,
-        // marginBottom: 5,  
         borderRightWidth: 0,
         borderLeftWidth: 0,
         borderTopWidth: 0,
@@ -440,14 +430,13 @@ const styles = StyleSheet.create({
     btn1: {
         borderRadius: 10,
         height: 30,
-        // width: width - 60,
         opacity: 1,
     },
     buttonStyle: {
         borderRadius: 10,
-        height: 30,
+        height: 35,
         backgroundColor: "#f4511e",
-        // width: width - 60,
+        paddingTop: 5,
         opacity: 1,
     },
     btnText: {

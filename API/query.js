@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 export const ALL_PRODUCT = gql`
     query allProduct($name: String, $first: Int, $after: String){
-        allProducts(name_Istartswith: $name, first: $first, after: $after, publish: true, deleted: false){
+        allProducts(name_Istartswith: $name, first: $first, after: $after, publish: true, deleted: false, orderBy:"-created_at"){
             pageInfo {
                 endCursor
                 hasNextPage
@@ -37,7 +37,7 @@ export const ALL_PRODUCT = gql`
 
 export const FILTER_PRODUCT = gql`
     query allProduct($name: String, $category: String, $maxPrice: Float, $minPrice: Float, $first: Int, $after: String){
-        allProducts(name_Istartswith: $name, price_Gt: $minPrice, price_Lt: $maxPrice, category_Name_Iexact: $category, first: $first, after: $after, publish: true, deleted: false){
+        allProducts(name_Istartswith: $name, price_Gt: $minPrice, price_Lt: $maxPrice, category_Name_Iexact: $category, first: $first, after: $after, publish: true, deleted: false, orderBy:"-created_at"){
             pageInfo {
                 endCursor
                 hasNextPage
@@ -111,7 +111,7 @@ export const PRODUCT_BY_ID = gql`
 
 export const PRODUCT_BY_USER = gql`
     query allProduct($id: Float, $first: Int, $after: String) {
-        allProducts(createdBy_Id: $id, first: $first, after: $after, deleted: false) {
+        allProducts(createdBy_Id: $id, first: $first, after: $after, deleted: false, orderBy:"-created_at") {
             pageInfo {
                 endCursor
                 hasNextPage
@@ -172,7 +172,7 @@ export const SEARCH_PRODUCT = gql`
 
 export const PRODUCT_BY_CATEGORY = gql`
     query allProduct($name: String, $first: Int, $after: String) {
-        allProducts(category_Name_Iexact: $name, first: $first, after: $after, publish: true, deleted: false) {
+        allProducts(category_Name_Iexact: $name, first: $first, after: $after, publish: true, deleted: false, orderBy:"-created_at") {
             pageInfo {
                 endCursor
                 hasNextPage
@@ -243,7 +243,7 @@ export const USER_INFO = gql`
 
 export const ALL_USERS = gql`
     query allUser($phone: String, $company: String, $first: Int, $after: String){
-        allUsers(phone_Istartswith: $phone, company_Istartswith: $company, first: $first, after: $after){
+        allUsers(phone_Istartswith: $phone, company_Istartswith: $company, first: $first, after: $after, orderBy:"company" ){
             pageInfo {
                 endCursor
                 hasNextPage

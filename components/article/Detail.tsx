@@ -20,7 +20,6 @@ export default function Detail() {
     const [firstLoad, setFirstLoad] = useState(true);
     const [imageTodisplayed, setImageToDisplayed] = useState(0);
     const [showFullScreenImage, setShowFullScreenImage] = useState(false);
-    let priceFormat = Intl.NumberFormat('de-DE');
 
     const onClose = () => {
         dispatch(showArticleDetail(false));
@@ -119,7 +118,7 @@ export default function Detail() {
                                 />
                             </TouchableOpacity>
                             <Text style={styles.price}>
-                                {selectedArticle?.name} - {selectedArticle?.price ? priceFormat.format(selectedArticle?.price)+" fcfa" : "Aucune prix"}
+                                {selectedArticle?.name} - {selectedArticle?.price ? selectedArticle?.price.toLocaleString('de-DE') +" fcfa" : "Aucune prix"}
                             </Text>
                         </View>
                         {/* <Image style={styles.image_container} source={require('../../Images/machupicu.jpg')}/> */}
@@ -188,6 +187,7 @@ export default function Detail() {
                             onCurrentImagePressed={index => {setShowFullScreenImage(false)}}
                             circleLoop={true}
                             firstItem={imageTodisplayed}
+                            style
                         />
                     </View>
                 }

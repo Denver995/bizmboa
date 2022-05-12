@@ -101,23 +101,19 @@ export default function HomeScreen({ navigation }) {
       </Modal>
       <Modal
         isVisible={showArticleModal}
+        animationOut="bounceOutDown"
         animationIn="fadeInUp"
-        // animationOut="bounceOutDown"
-        // animationIn="fadeInUp"
-        animationOut="fadeInDown"
         animationInTiming={300}
-        animationOutTiming={500}
+        animationOutTiming={1000}
       >
         <Detail/>
       </Modal>
       <Modal
         isVisible={formAction !== CLOSE_FORM}
+        animationOut="bounceOutDown"
         animationIn="fadeInUp"
-        animationOut="fadeInDown"
         animationInTiming={500}
-        animationOutTiming={100}
-        // onBackdropPress={toggleForm}
-        // onSwipeComplete={toggleForm}
+        animationOutTiming={1000}
       >
         <Form toggle={toggleForm} navigation={navigation}/>
       </Modal>

@@ -83,13 +83,13 @@ export default function Navigation() {
         <Drawer.Screen 
           name="CategoriesScreen" 
           component={CategoriesScreen} 
-          options={screenOption("Catégorie", "tag")}
+          options={screenOption("Catégories", "tag")}
         />
-        <Drawer.Screen 
+        {/* <Drawer.Screen 
           name="FavoritesScreen" 
           component={FavoritesScreen} 
           options={screenOption("Favoris", "heart")}
-        />
+        /> */}
         <Drawer.Screen 
           name="ShopScreen" 
           component={ShopScreen} 

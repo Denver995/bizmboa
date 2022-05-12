@@ -83,7 +83,7 @@ export const defaultContact = {
     ]
 }
 
-// export const api_url = 'https://bizmboa.herokuapp.com';
-// export const media_url = 'https://bizmboa.herokuapp.com/media';
-export const api_url = 'http://0552-41-202-207-1.ngrok.io';
-export const media_url = 'http://0552-41-202-207-1.ngrok.io/media';
+export const api_url = 'https://bizmboa.herokuapp.com';
+export const media_url = 'https://bizmboa.herokuapp.com/media';
+// export const api_url = 'http://b4e9-41-202-207-10.ngrok.io';
+// export const media_url = 'http://b4e9-41-202-207-10.ngrok.io/media';

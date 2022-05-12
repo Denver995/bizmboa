@@ -25,6 +25,19 @@ export default function ShopScreen({ navigation }) {
   const [firstLoad, setFirstLoad] = useState(true);
   const [showListResult, setShowListResult] = useState(false);
   
+  const handleResult = (result: any) => {
+    setSearchResult(result);
+    setIsSearching(false);
+    if(result.edges) {
+      setUsers(result.edges);
+    }
+  }
+
+  const handleError = () => {
+    setIsSearching(false);
+    setErrorMessage("Une erreur s'est produite");
+  } 
+  
   const [getUsers, { loading, error, fetchMore, refetch, networkStatus }] =
     useLazyQuery(ALL_USERS, {
       notifyOnNetworkStatusChange: true,
@@ -37,19 +50,6 @@ export default function ShopScreen({ navigation }) {
         console.log("error ", error);
       },
     });
-
-    const handleResult = (result: any) => {
-      setSearchResult(result);
-      setIsSearching(false);
-      if(result.edges) {
-        setUsers(result.edges);
-      }
-    }
-
-    const handleError = () => {
-      setIsSearching(false);
-      setErrorMessage("Une erreur s'est produite");
-    } 
 
     const updateSearch = (text: string) => {
         if(text.length > 0){
@@ -105,6 +105,14 @@ export default function ShopScreen({ navigation }) {
           after: 0,
           company: ''
         }
+      })
+      .then(resp => {
+        setIsSearching(false);
+        handleResult(resp.data.allUsers)
+      })
+      .catch(error => {
+        setIsSearching(false);
+        handleError()
       })
     }
   }, [firstLoad, searchResult, users])

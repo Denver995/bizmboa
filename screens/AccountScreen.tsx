@@ -22,31 +22,43 @@ export default function AccountScreen({ navigation }) {
   const [phone, setPhone] = useState(userData?.phone);
   const [showForm, setShowForm] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
   const [refetchUserInfo, setRefetchUserInfo] = useState(false);
 
-  let { loading: loadingUserInfo, error: UserInfo, data, refetch: refetchUser } = useQuery(USER_INFO);
-
-  const [getProduct, { loading, error, fetchMore, refetch, networkStatus }] = useLazyQuery(PRODUCT_BY_USER, {
+  const [getUserInfo, { loading: loadingUserInfo, error: UserInfoError, refetch: refetchUser }] = useLazyQuery(USER_INFO, {
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
-      handleResult(data.allProducts);
+      console.log('successfull get user data ', data);
+      
     },
     onError() {
-      // setIsSearching(false)
-      handleError()
       console.log('error ', error);
     },
   });
 
+
   const handleResult = (result: any) => {
     setSearchResult(result);
+    setIsSearching(false);
     if(result.edges) setProducts(result.edges);
     // setPhone(data.connectedUser.phone);
   }
 
   const handleError = () => {
+    setIsSearching(false);
     setErrorMessage("Une erreur s'est produite");
   }
+
+  const [getProduct, { loading: loadingProduct, error, fetchMore, refetch, networkStatus }] = useLazyQuery(PRODUCT_BY_USER, {
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data) => {
+      handleResult(data.allProducts);
+    },
+    onError() {
+      handleError()
+      console.log('error ', error);
+    },
+  });
 
   const toggleForm = async() => {
     if(showForm && refetchUserInfo) {
@@ -79,20 +91,33 @@ export default function AccountScreen({ navigation }) {
     }    
   }
 
-  if(isFirstLoad && data && data.connectedUser) {
-    // dispatch(setUserData(data.connectedUser));
-    getProduct({
-      variables: {
-        first: 10,
-        after: 0,
-        id: data.connectedUser.id,
-      }
-    })
-    setIsFirstLoad(false)
-  }
 
   useEffect(() => {
-  }, [isFirstLoad, userData]);
+    if(isFirstLoad) {
+      getUserInfo()
+      .then(userInfo => {
+        setIsSearching(true);
+        getProduct({
+          variables: {
+            first: 10,
+            after: 0,
+            id: userInfo.data.connectedUser.id,
+          }
+        })
+        .then(resp => {
+          setIsSearching(false);
+          if(resp.data.allProducts && resp.data.allProducts.edges) setProducts(resp.data.allProducts.edges);
+        })
+        .catch(error => {
+          handleError()
+        })
+        setIsFirstLoad(false)
+      }).catch(error => {
+        console.log('user info error ', error);
+      })
+      setIsFirstLoad(false);
+    }
+  }, [isFirstLoad, userData, isSearching]);
   
   return (
     <View style={styles.container}>
@@ -107,8 +132,8 @@ export default function AccountScreen({ navigation }) {
           />
         </View>
         <View style={styles.resultContainer}>
-          {loading ?<><Loader /><Loader /></>  : <></>}
-          {!loading && products && products.length > 0 && 
+          {isSearching ? <><Loader /><Loader /></>  : <></>}
+          {!isSearching && products && products.length > 0 && 
             <FlatList
               data={products}
               renderItem={({item}) => 
@@ -133,7 +158,7 @@ export default function AccountScreen({ navigation }) {
         >
           <Icon name="user-cog" size={20} color="white" />
         </TouchableOpacity>
-        {!isFirstLoad && !loading && products.length == 0 && 
+        {!isFirstLoad && !isSearching && products.length == 0 && 
           <View style={{flex: 1 ,marginTop: 15}}>
             {products.length == 0 && <Text style={styles.anyResult}>Aucune publication</Text>}
           </View>

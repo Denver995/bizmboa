@@ -172,10 +172,11 @@ export default function Search() {
                     after: 0,
                     name: ''
                 }
-            }).then(resp => {
+            })
+            .then(resp => {
                 setIsSearching(false);
-                handleResult(resp.data.allProducts)}
-            )
+                handleResult(resp.data.allProducts)
+            })
             .catch(error => {
                 setIsSearching(false);
                 handleError()
@@ -230,9 +231,9 @@ export default function Search() {
             <Modal
                 isVisible={showFilter}
                 animationIn="fadeInRight"
-                animationOut="fadeInLeft"
+                animationOut="fadeOutRight"
                 animationInTiming={500}
-                animationOutTiming={100}
+                animationOutTiming={1000}
                 deviceHeight={windowHeight}
             >
                 <FilterForm 

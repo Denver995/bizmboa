@@ -18,6 +18,15 @@ export default function ArticleByShop({showList}) {
   const selectedShop = useSelector(state => state.selectedShop);
     
     
+  const handleResult = (result: any) => {
+    setSearchResult(result);
+    if(result.edges) setProducts(result.edges);
+  }
+    
+  const handleError = () => {
+    setErrorMessage("Une erreur s'est produite");
+  }
+
   const [productByUser, { loading, error, fetchMore, refetch, networkStatus }] = useLazyQuery(PRODUCT_BY_USER, {
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
@@ -31,15 +40,6 @@ export default function ArticleByShop({showList}) {
   });
 
   const refreshing = networkStatus === NetworkStatus.refetch
-
-  const handleResult = (result: any) => {
-    setSearchResult(result);
-    if(result.edges) setProducts(result.edges);
-  }
-    
-  const handleError = () => {
-    setErrorMessage("Une erreur s'est produite");
-  }
 
   const handleOnEndReached = () => {
     if (fetchMore && searchResult?.pageInfo.hasNextPage){
@@ -69,6 +69,14 @@ export default function ArticleByShop({showList}) {
           after: 0,
           phone: selectedShop.phone
         }
+      })
+      .then(resp => {
+        setIsSearching(false);
+        handleResult(resp.data.allProducts)
+      })
+      .catch(error => {
+        setIsSearching(false);
+        handleError()
       })
     }
   }, [firstLoad, searchResult, products])

@@ -18,7 +18,6 @@ export default function Item({product, showAction=false, refetch}) {
     // const formAction = useSelector(state => state?.formAction);
     const [changeArticleStatus] = useMutation(UPDATE_PRODUCT_STATUS);
     const [deleteArticle] = useMutation(DELETE_PRODUCT);
-    let priceFormat = Intl.NumberFormat('de-DE');
 
     const showAlert = (index) => {
         Alert.alert(
@@ -163,10 +162,10 @@ export default function Item({product, showAction=false, refetch}) {
                         {product?.note ? product?.note : ""} 
                     </Text> */}
                     <Text style={styles.vote}>
-                        {product?.price ? priceFormat.format(product?.price)+" Fcfa" : ""}
+                        {product?.price ? parseFloat(product?.price).toLocaleString('de-DE')+" Fcfa" : ""}
                     </Text>
                     <Text style={styles.createdAt} >
-                        {Moment(new Date(product.createdAt)).startOf('day').fromNow()}
+                        {Moment(new Date(product.createdAt)).utcOffset(new Date().getTimezoneOffset()).startOf('day').fromNow()}
                         
                     </Text>
                 </View>

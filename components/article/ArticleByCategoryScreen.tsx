@@ -9,7 +9,6 @@ import Item from "./Item";
 import { PRODUCT_BY_CATEGORY } from "../../API/query";
 
 export default function ArticleByCategoryScreen({showList}) {
-  const dispatch = useDispatch();
   const [searchResult, setSearchResult] = useState([]);
   const [products, setProducts] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -18,7 +17,17 @@ export default function ArticleByCategoryScreen({showList}) {
   const [scrollBegin, setScrollBegin] = useState(false);
   const selectedCategory = useSelector(state => state.selectedCategory);
     
+  
+  const handleResult = (result: any) => {
+    setSearchResult(result);
+    if(result.edges) setProducts(result.edges);
+  }
     
+  const handleError = () => {
+    setIsSearching(false);
+    setErrorMessage("Une erreur s'est produite");
+  }
+
   const [productByCategory, { loading, error, fetchMore, refetch, networkStatus }] = useLazyQuery(PRODUCT_BY_CATEGORY, {
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
@@ -32,15 +41,6 @@ export default function ArticleByCategoryScreen({showList}) {
   });
 
   const refreshing = networkStatus === NetworkStatus.refetch
-
-  const handleResult = (result: any) => {
-    setSearchResult(result);
-    if(result.edges) setProducts(result.edges);
-  }
-    
-  const handleError = () => {
-    setErrorMessage("Une erreur s'est produite");
-  }
 
   const handleOnEndReached = () => {
     if (fetchMore && searchResult?.pageInfo.hasNextPage){
@@ -70,7 +70,12 @@ export default function ArticleByCategoryScreen({showList}) {
           after: 0,
           name: selectedCategory.name
         }
-      }).then(resp => handleResult(resp.data.allProducts))
+      })
+      .then(resp => {
+          setIsSearching(false);
+          handleResult(resp.data.allProducts)
+        }
+      )
       .catch(error => handleError())
     }
   }, [firstLoad, searchResult, products])
@@ -90,8 +95,8 @@ export default function ArticleByCategoryScreen({showList}) {
         </ListItem>
       </TouchableOpacity>
       <View style={styles.resultContainer}>
-        {loading ?<><Loader /><Loader /><Loader /></>  : <></>}
-        {(!loading && products.length > 0) && (
+        {isSearching ?<><Loader /><Loader /><Loader /></>  : <></>}
+        {(!isSearching && products.length > 0) && (
           <FlatList
             data={products}
             renderItem={({item}) => 
@@ -110,7 +115,7 @@ export default function ArticleByCategoryScreen({showList}) {
             refreshing={refreshing}
           />
         )}
-        {!loading && products.length == 0 && 
+        {!isSearching && products.length == 0 && 
           <View style={{ marginTop: 15}}>
             <Text style={styles.anyResult}>{error ? "Oops...Une erreur s'est produite":"Aucun résultat"}</Text>
           </View>
